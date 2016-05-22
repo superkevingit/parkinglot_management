@@ -1,0 +1,10 @@
+{% include 'head.html' %}
+{% load staticfiles %}
+<script src="{% static "jquery.min.js" %}"></script>
+<script src="{% static "park.js" %}"></script>
+<form method="POST">
+    {% csrf_token %}
+    {{ car_form }}
+    <input type="submit" value="确定">
+</form>
+
