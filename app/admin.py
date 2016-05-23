@@ -6,5 +6,4 @@ admin.site.register(Car)
 admin.site.register(TicketRecode)
 admin.site.register(PortRecode)
 admin.site.register(CarType)
-
-
+admin.site.register(TicketType)

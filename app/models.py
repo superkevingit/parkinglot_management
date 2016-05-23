@@ -17,28 +17,35 @@ class CarType(models.Model):
         return u'%s' % self.car_type
 
 
-# 票价对照
-class Ticket(models.Model):
+# 车票类型
+class TicketType(models.Model):
     TICKET_TYPE_CHOICES =(
         ('Month', u'月票'),
         ('Quarter', u'季度票'),
         ('Annual', u'年票'),
         ('Hour', u'小时票'),
     )
-    car_type = models.ForeignKey('CarType')
     ticket_type = models.CharField(u'票类型', max_length=20,
                                    choices=TICKET_TYPE_CHOICES)
+
+    def __str__(self):
+        return u'%s' % self.ticket_type
+
+# 车票价格
+class Ticket(models.Model):
+    cartype = models.ForeignKey('CarType')
+    tickettype = models.ForeignKey('TicketType')
     ticket_price = models.IntegerField(u'票价')
 
     def __str__(self):
-        return u'%s %s' % (self.car_type, self.ticket_type)
+        return u'%s %s' % (self.cartype, self.tickettype)
 
 
 # 车辆信息
 class Car(models.Model):
     license = models.CharField(u'车牌', max_length=50)
-    car_type = models.ForeignKey('CarType')
-    ticket = models.ForeignKey('Ticket')
+    cartype = models.ForeignKey('CarType')
+    tickettype = models.ForeignKey('TicketType')
     status = models.BooleanField(u'是否在库', default=False)
 
     def __str__(self):
@@ -48,7 +55,7 @@ class Car(models.Model):
 # 包票记录
 class TicketRecode(models.Model):
     car = models.ForeignKey('Car')
-    ticket = models.ForeignKey('Ticket')
+    tickettype = models.ForeignKey('TicketType')
     start_time = models.DateTimeField(u"开始时间")
     stop_time = models.DateTimeField(u"停止时间")
     operator = models.ForeignKey(User)
@@ -82,6 +89,4 @@ class PortRecode(models.Model):
     port_time = models.DateTimeField(u"入库时间", auto_now_add=True)
     leave_time = models.DateTimeField(u"出库时间",
                                       null=True, blank=True)
-#    port_operator = models.ForeignKey(User)
-#    leave_operator = models.ForeignKey(User)
     charge = models.IntegerField(u"价格", default=0)

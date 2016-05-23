@@ -13,8 +13,8 @@ def add_car(request):
             car_type = car_form.cleaned_data['car_type']
             ticket_type = car_form.cleaned_data['ticket_type']
             new_car = Car(license=license,
-                          car_type=car_type,
-                          ticket=ticket_type)
+                          cartype=car_type,
+                          tickettype=ticket_type)
             new_car.save()
             messages.add_message(request, messages.SUCCESS, u"add car infomation success!")
             return HttpResponseRedirect('/add_car')
@@ -26,11 +26,10 @@ def add_car(request):
 def ticket_list(request, car_type):
     ticket_list = []
     car_type = request.GET['car_type']
-    tickets = Ticket.objects.filter(car_type=car_type)
+    tickets = Ticket.objects.filter(cartype=car_type)
     for ticket in tickets:
         t = {}
-        t['label'] = ticket.ticket_type
-        t['text'] = ticket.ticket_price
+        t['label'] = ticket.tickettype.ticket_type
+        t['text'] = ticket.id
         ticket_list.append(t)
-    print(ticket_list)
     return HttpResponse(json.dumps(ticket_list), content_type='application/json')

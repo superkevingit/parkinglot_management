@@ -12,10 +12,10 @@ for car_type in car_types:
 
 class CarForm(forms.Form):
     license = forms.CharField(max_length=50, label=u'车牌')
-    car_type = forms.ChoiceField(widget=forms.Select(
+    cartype = forms.ChoiceField(widget=forms.Select(
         attrs={'class': 'select',
                'onChange': 'getTicketOptions(this.value)'}),
         choices=car_type_choice,
         label=u'选择车辆类型')
-    ticket = forms.ChoiceField(widget=forms.Select(
+    tickettype = forms.ChoiceField(widget=forms.Select(
         attrs={'class': 'select'}), label=u'选择购票类型')
