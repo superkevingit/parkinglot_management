@@ -21,12 +21,13 @@ class CarType(models.Model):
 # 车票类型
 class TicketType(models.Model):
     TICKET_TYPE_CHOICES =(
+        ('Hour', u'小时票'),
         ('Month', u'月票'),
         ('Quarter', u'季度票'),
         ('Annual', u'年票'),
-        ('Hour', u'小时票'),
     )
-    ticket_type = models.CharField(u'购票类型', max_length=20,
+    ticket_type = models.CharField(u'购票类型',
+                                   max_length=20,
                                    choices=TICKET_TYPE_CHOICES,
                                     unique=True)
 
@@ -47,7 +48,9 @@ class Ticket(models.Model):
 class Car(models.Model):
     license = models.CharField(u'车牌', max_length=50, unique=True)
     cartype = models.ForeignKey('CarType', verbose_name=u'车辆类型')
-    tickettype = models.ForeignKey('TicketType', verbose_name=u'车票类型')
+    tickettype = models.ForeignKey('TicketType',
+                                   default=4,
+                                   verbose_name=u'车票类型')
     status = models.BooleanField(u'是否在库', default=False)
 
     def __str__(self):
