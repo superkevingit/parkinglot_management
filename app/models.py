@@ -12,7 +12,8 @@ class CarType(models.Model):
     )
     car_type = models.CharField(u'车辆类型',
                                 max_length=20,
-                                choices=CAR_TYPE_CHOICES)
+                                choices=CAR_TYPE_CHOICES,
+                                unique=True)
     def __str__(self):
         return u'%s' % self.car_type
 
@@ -25,16 +26,17 @@ class TicketType(models.Model):
         ('Annual', u'年票'),
         ('Hour', u'小时票'),
     )
-    ticket_type = models.CharField(u'票类型', max_length=20,
-                                   choices=TICKET_TYPE_CHOICES)
+    ticket_type = models.CharField(u'购票类型', max_length=20,
+                                   choices=TICKET_TYPE_CHOICES,
+                                    unique=True)
 
     def __str__(self):
         return u'%s' % self.ticket_type
 
 # 车票价格
 class Ticket(models.Model):
-    cartype = models.ForeignKey('CarType')
-    tickettype = models.ForeignKey('TicketType')
+    cartype = models.ForeignKey('CarType', verbose_name=u'车辆类型')
+    tickettype = models.ForeignKey('TicketType', verbose_name=u'购票类型')
     ticket_price = models.IntegerField(u'票价')
 
     def __str__(self):
@@ -43,9 +45,9 @@ class Ticket(models.Model):
 
 # 车辆信息
 class Car(models.Model):
-    license = models.CharField(u'车牌', max_length=50)
-    cartype = models.ForeignKey('CarType')
-    tickettype = models.ForeignKey('TicketType')
+    license = models.CharField(u'车牌', max_length=50, unique=True)
+    cartype = models.ForeignKey('CarType', verbose_name=u'车辆类型')
+    tickettype = models.ForeignKey('TicketType', verbose_name=u'车票类型')
     status = models.BooleanField(u'是否在库', default=False)
 
     def __str__(self):
@@ -58,7 +60,7 @@ class TicketRecode(models.Model):
     tickettype = models.ForeignKey('TicketType')
     start_time = models.DateTimeField(u"开始时间")
     stop_time = models.DateTimeField(u"停止时间")
-    operator = models.ForeignKey(User)
+    operator = models.ForeignKey(User, verbose_name=u'操作者')
 
     def __str__(self):
         return u'%s %s' % (self.car.license, self.ticket.ticket_type)
