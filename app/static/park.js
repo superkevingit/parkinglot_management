@@ -16,3 +16,12 @@ $(document).ready(function(){
         $('#license-result').empty();
     })
 });
+
+
+$('#license').keyup(function(){
+    var query;
+    query = $(this).val();
+    $.get('/FindByTicket', {license: query}, function(data){
+        $('#license').html(data);
+    })
+})

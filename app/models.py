@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from datetime import *
 from dateutil.relativedelta import *
 
@@ -55,6 +56,9 @@ class Car(models.Model):
 
     def __str__(self):
         return u'%s' % self.license
+
+    def get_absolute_url(self):
+        return reverse('car-detail', kwargs={'pk': self.pk })
 
 
 # 包票记录

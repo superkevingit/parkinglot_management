@@ -7,3 +7,9 @@
     {% endfor %}
 </ul>
 {% endif %}
+
+{% if user.is_authenticated %}
+<p>你好，{{ user.username }}&nbsp <a href="{% url 'user-logout' %}">登出？</a></p>
+{% else %}
+    <p><a href="{% url 'user-login' %}">请登录</a></p>
+{% endif %}

@@ -1,0 +1,7 @@
+<p>车牌：{{ object.license}}</p>
+<p>车辆类型：{{ object.cartype }}</p>
+<p>购票类型： {{ object.tickettype}}</p>
+<p>状态： {{ object.status }}</p>
+<input type="button" value="入库">
+<input type="button" value="出库">
+<input type="button" value="更改购票类型" onclick="{location.href='{% url 'car-list' %}Update/{{ object.id }}' }">

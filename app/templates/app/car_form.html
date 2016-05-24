@@ -1,9 +1,8 @@
 {% include 'head.html' %}
-{% load staticfiles %}
-<script src="{% static "jquery.js" %}"></script>
 <form method="POST">
     {% csrf_token %}
-    {{ car_form }}
+    车牌：{{ object.license}}<br/>
+    车辆类型： {{ object.cartype }}<br/>
+    {{ form }}
     <input type="submit" value="确定">
 </form>
-

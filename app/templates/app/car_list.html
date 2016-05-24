@@ -1,0 +1,12 @@
+{% include 'head.html' %}
+<h1>Cars<h1>
+    <ul>
+    {% for car in object_list %}
+    <li>车牌：<a href="Detail/{{ car.id }}">{{ car.license }}<a></li>
+    <li>车辆类型：{{ car.cartype }}</li>
+    <li>购票类型：{{ car.tickettype }}</li>
+        <hr>
+    {% empty %}
+        <li>暂无车辆</li>
+    {% endfor %}
+    </ul>
