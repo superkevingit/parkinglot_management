@@ -72,12 +72,14 @@ class TicketRecode(models.Model):
     def __str__(self):
         return u'%s %s' % (self.car.license, self.ticket.ticket_type)
 
-    def get_ticket_period(self, ticket_type):
+    @classmethod
+    def get_ticket_period(cls, ticket_type):
         begin = datetime.now()
-        end = begin+calculate_stop(begin, ticket_type)
+        end = cls.calculate_stop_time(begin, ticket_type)
         return begin, end
 
-    def calculate_stop_time(self, begin, ticket_type):
+    @classmethod
+    def calculate_stop_time(cls, begin, ticket_type):
         if ticket_type == 'Month':
             stop_time = begin+relativedelta(months=+1)
             return stop_time
@@ -95,7 +97,10 @@ class TicketRecode(models.Model):
 # 泊车记录
 class PortRecode(models.Model):
     car = models.ForeignKey('Car')
-    port_time = models.DateTimeField(u"入库时间", auto_now_add=True)
+    port_time = models.DateTimeField(u"入库时间")
     leave_time = models.DateTimeField(u"出库时间",
                                       null=True, blank=True)
     charge = models.IntegerField(u"价格", default=0)
+
+    def __str__(self):
+        return u'%s %s' % (self.car,self.port_time) + u'泊车记录'

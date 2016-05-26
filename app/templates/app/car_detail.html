@@ -1,7 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
 <p>车牌：{{ object.license}}</p>
 <p>车辆类型：{{ object.cartype }}</p>
 <p>购票类型： {{ object.tickettype}}</p>
 <p>状态： {{ object.status }}</p>
-<input type="button" value="入库">
-<input type="button" value="出库">
-<input type="button" value="更改购票类型" onclick="{location.href='{% url 'car-list' %}Update/{{ object.id }}' }">
+<input type="button" value="入库" class="btn btn-lg btn-primary" {% if object.status %} disabled="disabled" {% endif %}
+                                                                onclick="{location.href='{% url 'car-in' object.id %}'}">
+<input type="button" value="出库"  class="btn btn-lg btn-primary" {% if not object.status %} disabled="disabled" {% endif %}
+                                                                onclick="{location.href='{% url 'car-out' object.id %}'}">
+<input type="button" value="包票服务" class="btn btn-lg btn-primary"
+                                                                onclick="{location.href='{% url 'ticket-recode' object.id %}' }">
+{% endblock  %}

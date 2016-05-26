@@ -39,7 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'app',
-    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,10 +83,6 @@ DATABASES = {
     }
 }
 
-BOOTSTRAP3 = {
-    'jquery_url': '/static/jquery.js',
-    'base_url': '/static/bootstrap/',
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

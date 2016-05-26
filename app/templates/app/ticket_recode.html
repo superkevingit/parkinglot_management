@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if car and update_form %}
+<form method="POST">
+    {% csrf_token %}
+    {% for c in car%}
+    车牌：{{ c.license}}<br/>
+    车辆类型： {{ c.cartype }}<br/>
+    {% endfor %}
+    {{ update_form }}
+    <input type="submit" value="确定">
+</form>
+{% endif %}
+{% endblock %}

@@ -1,8 +1,0 @@
-{% include 'head.html' %}
-<form method="POST">
-    {% csrf_token %}
-    车牌：{{ object.license}}<br/>
-    车辆类型： {{ object.cartype }}<br/>
-    {{ form }}
-    <input type="submit" value="确定">
-</form>

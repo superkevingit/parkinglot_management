@@ -1,2 +1,4 @@
 Django==1.8.2
 django-bootstrap3==7.0.1
+python-dateutil==2.5.3
+six==1.10.0

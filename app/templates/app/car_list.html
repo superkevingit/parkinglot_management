@@ -1,12 +1,21 @@
-{% include 'head.html' %}
-<h1>Cars<h1>
-    <ul>
-    {% for car in object_list %}
-    <li>车牌：<a href="Detail/{{ car.id }}">{{ car.license }}<a></li>
-    <li>车辆类型：{{ car.cartype }}</li>
-    <li>购票类型：{{ car.tickettype }}</li>
-        <hr>
+{% extends 'base.html' %}
+ {% block content %}
+    <div class="page-header">
+        <h1>全部车辆</h1>
+    </div>
+    <div class="row">
+            <div class="col-md-3">车牌</div>
+            <div class="col-md-3">车辆类型</div>
+            <div class="col-md-3">购票类型</div>
+            <div class="col-md-3">状态</div>
+    </div>
+    <br/>
+    {% for car in cars %}
+    <div class="col-md-3"><a href="{% url 'car-detail' car.id %}">{{ car.license }}<a></li></div>
+    <div class="col-md-3">{{ car.cartype }}</li></div>
+    <div class="col-md-3">{{ car.tickettype }}</li></div>
+    <div class="col-md-3">{{ car.status }}</li></div>
     {% empty %}
-        <li>暂无车辆</li>
+    <p>暂无车辆</p>
     {% endfor %}
-    </ul>
+{% endblock %}

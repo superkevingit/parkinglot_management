@@ -1,10 +1,17 @@
-{% include 'head.html' %}
-<body>
-    <h1>登陆</h1>
-    <form id="login_form" method="POST" action="/UserLogin/">
-        {% csrf_token %}
-        用户名：<input type="text" name="username" value="" size="50" /><br/>
-        密码：<input type="password" name="password" value="" size="50"/><br/>
-        <input type="submit" value="提交">
-    </form>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+ <body>
+    <div class="container">
+      <form class="form-signin" id="login_form" method="POST" action="{% url 'user-login' %}">
+            {% csrf_token %}
+        <h2 class="form-signin-heading">请登录</h2>
+        <label for="inputText" class="sr-only">用户名</label>
+        <input type="text" id="inputText" class="form-control" placeholder="用户名" required autofocus>
+        <br/>
+        <label for="inputPassword" class="sr-only">密码</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="密码" required>
+        <br/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登陆</button>
+      </form>
+    </div> <!-- /container -->
+{% endblock %}
