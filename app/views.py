@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView
 from .forms import CarForm, LicenseForm, UserForm, UpdateForm
 from .models import Ticket, Car, TicketType, CarType, PortRecode, TicketRecode
 from datetime import *
@@ -20,12 +20,33 @@ def car_in(request, pk):
         else:
             messages.add_message(request, messages.WARNING, u"车辆已经在库中")
             return HttpResponseRedirect(reverse('car-detail', args=(pk,)))
+    return HttpResponseRedirect(reverse('car-list'))
 
 # 车辆出库
 def car_out(request, pk):
-    Car.objects.filter(id=pk).update(status=False)
-    messages.add_message(request, messages.SUCCESS, u"车辆成功出库")
-    return HttpResponseRedirect(reverse('car-detail', args=(pk,)))
+    leave_time = datetime.now()
+    car = Car.objects.get(id=pk)
+    if car:
+        if car.status:
+            ticket = Ticket.objects.get(cartype=car.cartype, tickettype=car.tickettype)
+            portrecode = PortRecode.objects.get(car=car, leave_time=None)
+            if ticket and portrecode:
+                charge = ticket.calculate_charge(ticket_type=car.tickettype.ticket_type, port_time=portrecode.port_time, leave_time=leave_time)
+                portrecode.leave_time = leave_time
+                portrecode.charge = charge
+                portrecode.save
+                Car.objects.filter(id=pk).update(status=False)
+                messages.add_message(request, messages.SUCCESS, u"车辆成功出库")
+                return HttpResponseRedirect(reverse('car-detail', args=(pk,)))
+            else:
+                messages.add_message(request, messages.WARNING, u"出库失败")
+                return HttpResponseRedirect(reverse('car-detail', args=(pk,)))
+        else:
+            messages.add_message(request, messages.WARNING, u"库内无此车")
+            return HttpResponseRedirect(reverse('car-list'))
+    return HttpResponseRedirect(reverse('car-list'))
+
+
 
 # 车辆包票
 def ticket_recode(request, pk):
@@ -37,7 +58,7 @@ def ticket_recode(request, pk):
         if update_form.is_valid():
             tickettype=update_form.cleaned_data['tickettype']
             _tickettype=TicketType.objects.get(id=tickettype)
-            start_time, stop_time = TicketRecode.get_ticket_period(ticket_type=tickettype)
+            start_time, stop_time = TicketRecode.get_ticket_period(ticket_type=_tickettype.ticket_type)
             operator = request.user
             TicketRecode.objects.update_or_create(car=_car, tickettype=_tickettype,
                                         start_time=start_time,
@@ -114,15 +135,6 @@ def register(request):
                   {'user_form':user_form,
                    'registered': registered})
 
-# 按车牌实时查找车辆
-def find_by_license(max_results=0, starts_with=''):
-    license_list = []
-    if starts_with:
-        license_list = Car.objects.filter(license__istartswith=starts_with)
-#    if max_results > 0:
-#        if len(license_list)> max_results:
-#            license_list = license_list[:max_results]
-    return license_list
 
 # 添加车辆信息
 def add_car(request):

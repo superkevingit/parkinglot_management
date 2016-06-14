@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 from django.contrib import admin
-from app.views import add_car, find_by_license,\
+from app.views import add_car,\
     register, user_login, user_logout, car_in, car_out,\
     car_in_list, car_list, ticket_recode,\
     CarDetailView
@@ -17,6 +17,5 @@ urlpatterns = [
     url(r'^UserLogin/$', user_login, name='user-login'),
     url(r'^UserLogout/$', user_logout, name='user-logout'),
     url(r'^register/$', register, name='register'),
-    url(r'^FindByLicense/$', find_by_license, name='find-by-license'),
     url(r'^AddCar/$', add_car, name='add-car'),
 ]

@@ -44,6 +44,16 @@ class Ticket(models.Model):
     def __str__(self):
         return u'%s %s' % (self.cartype, self.tickettype)
 
+    @classmethod
+    def calculate_charge(cls, ticket_type, port_time, leave_time):
+        if ticket_type == 'Hour':
+            time = (leave_time - port_time).seconds
+            hour = int(time/3600)+1
+            charge = cls.ticket_price * hour
+            return charge
+        else:
+            return cls.ticket_price
+
 
 # 车辆信息
 class Car(models.Model):
@@ -70,7 +80,7 @@ class TicketRecode(models.Model):
     operator = models.ForeignKey(User, verbose_name=u'操作者')
 
     def __str__(self):
-        return u'%s %s' % (self.car.license, self.ticket.ticket_type)
+        return u'%s %s' % (self.car.license, self.tickettype.ticket_type)
 
     @classmethod
     def get_ticket_period(cls, ticket_type):
